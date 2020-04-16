@@ -5,24 +5,25 @@ public class Location {
     public int y;
     String name;
     Set<String> items;
-    Set<String> actions;
+    List<String> actions;
 
-    public Location(Field field, int x, int y, String name) {
+    public Location(int x, int y, String name) {
         this.x = x;
         this.y = y;
         this.name = name;
-        field.gameField[y][x] = this;
     }
 
     public void addActions(String...strings) {
+        List<String> result = new ArrayList<>();
         for (String s : strings) {
-            this.actions.add(s);
+            this.actions = result;
         }
     }
 
     public void addItems (String...strings) {
+        Set<String> result = new HashSet<>();
         for (String s : strings) {
-            this.items.add(s);
+            this.items = result;
         }
     }
 }
