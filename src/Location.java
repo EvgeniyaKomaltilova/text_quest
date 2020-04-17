@@ -1,23 +1,24 @@
 import java.util.*;
 
 public class Location {
-    public int x;
-    public int y;
     String name;
     Set<String> items;
     List<String> actions;
+    Map<String, Object> ways;
 
-    public Location(int x, int y, String name) {
-        this.x = x;
-        this.y = y;
+    public Location(String name, String...strings) {
         this.name = name;
+        this.actions = addActions(strings);
+        this.ways = new HashMap<>();
+        this.actions = new ArrayList<>();
     }
 
-    public void addActions(String...strings) {
+    public static List<String> addActions(String...strings) {
         List<String> result = new ArrayList<>();
         for (String s : strings) {
-            this.actions = result;
+            result.add(s);
         }
+        return result;
     }
 
     public void addItems (String...strings) {
