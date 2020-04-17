@@ -4,7 +4,7 @@ public class Location {
     String name;
     Set<String> items;
     List<String> actions;
-    Map<String, Object> ways;
+    Map<String, Boolean> ways;
 
     public Location(String name, String...strings) {
         this.name = name;
@@ -13,7 +13,7 @@ public class Location {
         this.actions = new ArrayList<>();
     }
 
-    public static List<String> addActions(String...strings) {
+    public List<String> addActions(String...strings) {
         List<String> result = new ArrayList<>();
         for (String s : strings) {
             result.add(s);

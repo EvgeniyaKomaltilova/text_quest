@@ -12,6 +12,7 @@ public class Game {
     static Location livingRoom = new Location("в гостиной.");
     static Location kitchen = new Location("на кухне.");
     static Location bathRoom = new Location("в ванной комнате.");
+    static Location exit = new Location("");
 
     public static void main(String[] args) {
         locationInit();
@@ -42,14 +43,19 @@ public class Game {
 
     public static void goToLocation(String key) {
         for (Map.Entry<String, Location> entry : locationMap.entrySet()) {
+            if (key.equals("Выйти наружу!")) {
+                System.out.println("Поздравляю! Вы выбрались!");
+                isStarted = false;
+                break;
+            }
             if (key.equals(entry.getKey())) {
-                System.out.println("Вы находитесь " + entry.getValue().name);
+                Location current = entry.getValue();
+                System.out.println("Вы находитесь " + current.name);
                 System.out.println("Вы можете:");
-                for (String s : entry.getValue().actions) {
-                    System.out.println("* " + s);
-                }
-                for (String o : entry.getValue().ways.keySet()) {
-                    System.out.println("-> " + o);
+                for (Map.Entry<String, Boolean> currentEntry : current.ways.entrySet()) {
+                    if (currentEntry.getValue()) {
+                        System.out.println("-> " + currentEntry.getKey());
+                    }
                 }
             }
         }
@@ -61,13 +67,15 @@ public class Game {
         locationMap.put("Идти в гостиную", livingRoom);
         locationMap.put("Идти на кухню", kitchen);
         locationMap.put("Идти в ванную", bathRoom);
-        bedRoom.ways.put("Идти в коридор", hallway);
-        hallway.ways.put("Идти в гостиную", livingRoom);
-        hallway.ways.put("Идти в спальню", bedRoom);
-        livingRoom.ways.put("Идти на кухню", kitchen);
-        livingRoom.ways.put("Идти в коридор", hallway);
-        kitchen.ways.put("Идти в ванную", bathRoom);
-        kitchen.ways.put("Идти в гостиную", livingRoom);
-        bathRoom.ways.put("Идти на кухню", kitchen);
+        locationMap.put("Выйти наружу!", exit);
+        bedRoom.ways.put("Идти в коридор", true);
+        hallway.ways.put("Идти в гостиную", true);
+        hallway.ways.put("Идти в спальню", true);
+        hallway.ways.put("Выйти наружу!", true);
+        livingRoom.ways.put("Идти на кухню", true);
+        livingRoom.ways.put("Идти в коридор", true);
+        kitchen.ways.put("Идти в ванную", true);
+        kitchen.ways.put("Идти в гостиную", true);
+        bathRoom.ways.put("Идти на кухню", true);
     }
 }
