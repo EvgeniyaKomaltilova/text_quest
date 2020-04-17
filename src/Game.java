@@ -1,12 +1,13 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.SQLOutput;
 import java.util.*;
 
 public class Game {
     static boolean isStarted;
+    static Location currentLocation;
     static Map<String,Location> locationMap = new HashMap<>();
+    static List<String> inventory = new ArrayList<>();
     static Location bedRoom = new Location("в спальне.");
     static Location hallway = new Location("в коридоре.");
     static Location livingRoom = new Location("в гостиной.");
@@ -20,6 +21,7 @@ public class Game {
         String s;
         while(isStarted) {
             s = getString();
+            currentLocation.doAction(s);
             goToLocation(s);
         }
     }
@@ -49,9 +51,13 @@ public class Game {
                 break;
             }
             if (key.equals(entry.getKey())) {
+                currentLocation = entry.getValue();
                 Location current = entry.getValue();
                 System.out.println("Вы находитесь " + current.name);
                 System.out.println("Вы можете:");
+                for (String s : current.actions) {
+                    System.out.println("* " + s);
+                }
                 for (Map.Entry<String, Boolean> currentEntry : current.ways.entrySet()) {
                     if (currentEntry.getValue()) {
                         System.out.println("-> " + currentEntry.getKey());
@@ -68,14 +74,22 @@ public class Game {
         locationMap.put("Идти на кухню", kitchen);
         locationMap.put("Идти в ванную", bathRoom);
         locationMap.put("Выйти наружу!", exit);
+
         bedRoom.ways.put("Идти в коридор", true);
+        bedRoom.items.add("ключ");
+        bedRoom.actions.add("Обыскать комнату");
+
         hallway.ways.put("Идти в гостиную", true);
         hallway.ways.put("Идти в спальню", true);
-        hallway.ways.put("Выйти наружу!", true);
+        hallway.ways.put("Выйти наружу!", false);
+        hallway.actions.add("Открыть дверь");
+
         livingRoom.ways.put("Идти на кухню", true);
         livingRoom.ways.put("Идти в коридор", true);
+
         kitchen.ways.put("Идти в ванную", true);
         kitchen.ways.put("Идти в гостиную", true);
+
         bathRoom.ways.put("Идти на кухню", true);
     }
 }
