@@ -1,7 +1,8 @@
 import java.util.*;
 
 public class Location {
-    String name;
+    String yourLocationIs;
+    String wayToThis;
     List<String> items;
     Map<String, Boolean> actions;
     Map<String, Boolean> ways;
@@ -9,15 +10,17 @@ public class Location {
     String firstMessage;
     List<String> messages;
 
-    public Location(String name) {
-        this.name = name;
+    public Location(String wayToThis, String yourLocationIs) {
+        this.wayToThis = wayToThis;
+        this.yourLocationIs = yourLocationIs;
         this.ways = new HashMap<>();
         this.actions = new HashMap<>();
         this.items = new ArrayList<>();
         this.messages = new ArrayList<>();
+        Game.locationMap.put(wayToThis, this);
     }
 
-    public void searchItem() {
+    private void searchItem() {
         if (this.items.size() != 0) {
             String item = this.items.get(0);
             Game.inventory.add(item);
@@ -35,7 +38,7 @@ public class Location {
             System.out.println("Вы ничего не нашли...");
     }
 
-    public void openDoor() {
+    private void openDoor() {
         if (Game.inventory.contains("ключ")) {
             System.out.println("Вы смогли открыть дверь!");
             Game.hallway.ways.replace("Выйти наружу!", false, true);
@@ -51,6 +54,51 @@ public class Location {
             case "Открыть дверь":
                 this.openDoor();
                 break;
+        }
+    }
+
+    public void addWays(Location...locations) {
+        for (Location loc : locations) {
+            this.ways.put(loc.wayToThis, true);
+            loc.ways.put(this.wayToThis, true);
+        }
+    }
+
+    public void oneWayTicket(Location...locations) {
+        for (Location loc : locations) {
+            this.ways.put(loc.wayToThis, true);
+            loc.ways.put(this.wayToThis, false);
+        }
+    }
+
+    public void addClosedWay(Location...locations) {
+        for (Location loc : locations) {
+            this.ways.put(loc.wayToThis, false);
+            loc.ways.put(this.wayToThis, false);
+        }
+    }
+
+    public void addAction(String...strings) {
+        for (String s : strings) {
+            this.actions.put(s, true);
+        }
+    }
+
+    public void addInaccessibleAction(String...strings) {
+        for (String s : strings) {
+            this.actions.put(s, false);
+        }
+    }
+
+    public void addMessage(String...strings) {
+        for (String s : strings) {
+            this.messages.add(s);
+        }
+    }
+
+    public void addItems(String...strings) {
+        for (String s : strings) {
+            this.items.add(s);
         }
     }
 }

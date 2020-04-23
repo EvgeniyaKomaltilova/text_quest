@@ -8,12 +8,12 @@ public class Game {
     static Location currentLocation;
     static Map<String,Location> locationMap = new HashMap<>();
     static List<String> inventory = new ArrayList<>();
-    static Location bedRoom = new Location("в спальне.");
-    static Location hallway = new Location("в коридоре.");
-    static Location livingRoom = new Location("в гостиной.");
-    static Location kitchen = new Location("на кухне.");
-    static Location bathRoom = new Location("в ванной комнате.");
-    static Location exit = new Location("");
+    static Location bedRoom = new Location("Идти в спальню", "в спальне. ");
+    static Location hallway = new Location("Идти в коридор", "в коридоре. ");
+    static Location livingRoom = new Location("Идти в гостиную", "в гостиной. ");
+    static Location kitchen = new Location("Идти на кухню", "на кухне. ");
+    static Location bathRoom = new Location("Идти в ванную", "в ванной комнате. ");
+    static Location exit = new Location("Выйти наружу!", "");
 
     public static void main(String[] args) {
         locationInit();
@@ -34,7 +34,7 @@ public class Game {
 
     public static String getString() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String s = "Введите \"1\"";
+        String s = "";
         try {
             s =  reader.readLine();
         } catch (IOException e) {
@@ -53,7 +53,7 @@ public class Game {
             if (key.equals(entry.getKey())) {
                 currentLocation = entry.getValue();
                 Location current = entry.getValue();
-                System.out.print("Вы находитесь " + current.name);
+                System.out.print("Вы находитесь " + current.yourLocationIs);
                 if (!current.isOpen) {
                     if (current.firstMessage!=null) {
                         System.out.println(current.firstMessage);
@@ -80,40 +80,26 @@ public class Game {
     }
 
     public static void locationInit() {
-        locationMap.put("Идти в спальню", bedRoom);
-        locationMap.put("Идти в коридор", hallway);
-        locationMap.put("Идти в гостиную", livingRoom);
-        locationMap.put("Идти на кухню", kitchen);
-        locationMap.put("Идти в ванную", bathRoom);
-        locationMap.put("Выйти наружу!", exit);
+        hallway.addWays(bathRoom, livingRoom, kitchen);
+        hallway.addClosedWay(exit);
+        hallway.addInaccessibleAction("Открыть дверь");
 
-        bedRoom.ways.put("Идти в коридор", true);
-        bedRoom.items.add("ключ");
-        bedRoom.actions.put("Обыскать комнату", true);
+        bedRoom.addWays(livingRoom);
+        bedRoom.addAction("Обыскать комнату");
+        bedRoom.addItems("ключ");
 
-        hallway.ways.put("Идти в гостиную", true);
-        hallway.ways.put("Идти в спальню", true);
-        hallway.ways.put("Выйти наружу!", false);
-        hallway.actions.put("Открыть дверь", false);
+        livingRoom.addAction("Обыскать комнату");
 
-        livingRoom.ways.put("Идти на кухню", true);
-        livingRoom.ways.put("Идти в коридор", true);
-        livingRoom.actions.put("Обыскать комнату", true);
-
-        kitchen.ways.put("Идти в ванную", true);
-        kitchen.ways.put("Идти в гостиную", true);
-        kitchen.actions.put("Обыскать комнату", true);
+        kitchen.addAction("Обыскать комнату");
         kitchen.firstMessage = " Испуганные тараканы бросились врассыпную.";
-        kitchen.messages.add(" С потолка свисает длинная нить паутины.");
-        kitchen.messages.add(" Сквозь пыльное окно едва пробивается лучик света.");
-        kitchen.messages.add(" Цветы на подоконнике, очевидно, давно никто не поливал.");
-        kitchen.messages.add(" С потолка свисает длинная нить паутины.");
-        kitchen.messages.add(" За окном слышно пение птиц.");
-        kitchen.messages.add(" Через щели в полу дует ветер.");
+        kitchen.addMessage(" С потолка свисает длинная нить паутины.",
+                " Сквозь пыльное окно едва пробивается лучик света.",
+                " Цветы на подоконнике, очевидно, давно никто не поливал.",
+                " За окном слышно пение птиц.",
+                " Через щели в полу дует ветер.");
 
-        bathRoom.ways.put("Идти на кухню", true);
-        bathRoom.items.add("зубную щетку");
-        bathRoom.actions.put("Обыскать комнату", true);
-        bathRoom.actions.put("Почистить зубы", false);
+        bathRoom.addAction("Обыскать комнату");
+        bathRoom.addInaccessibleAction("Почистить зубы");
+        bathRoom.addItems("зубную щетку");
     }
 }
