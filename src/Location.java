@@ -1,6 +1,8 @@
 import java.util.*;
 
 public class Location {
+    static Person person = Game.person;
+
     String yourLocationIs;
     String wayToThis;
     List<String> items;
@@ -23,7 +25,7 @@ public class Location {
     private void searchItem() {
         if (this.items.size() != 0) {
             String item = this.items.get(0);
-            Game.inventory.add(item);
+            person.inventory.add(item);
             System.out.println("Вы нашли " + item + "!");
             switch (item) {
                 case "ключ" :
@@ -39,7 +41,7 @@ public class Location {
     }
 
     private void openDoor() {
-        if (Game.inventory.contains("ключ")) {
+        if (person.inventory.contains("ключ")) {
             System.out.println("Вы смогли открыть дверь!");
             Game.hallway.ways.replace("Выйти наружу!", false, true);
             Game.goToLocation("Идти в коридор");
