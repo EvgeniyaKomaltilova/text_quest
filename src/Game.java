@@ -35,6 +35,7 @@ public class Game {
         livingRoom.addAction("Обыскать комнату");
 
         kitchen.addAction("Обыскать комнату");
+        kitchen.addItems("какую-то еду");
         kitchen.firstMessage = " Испуганные тараканы бросились врассыпную.";
         kitchen.addMessage(" С потолка свисает длинная нить паутины.",
                 " Сквозь пыльное окно едва пробивается лучик света.",
@@ -48,9 +49,8 @@ public class Game {
     }
 
     public static void initPerson() {
-        person.addParameter("сила", 5);
-        person.addParameter("ловкость", 3);
-        person.addParameter("интеллект", 8);
+        person.addVariableParameter("hunger", 50);
+        //System.out.println(person.variableParameters.entrySet());
     }
 
     public static void startGame() {
@@ -63,6 +63,7 @@ public class Game {
         String s;
         while(isStarted) {
             s = getString();
+            checkParameters();
             currentLocation.doAction(s);
             goToLocation(s);
         }
@@ -111,6 +112,18 @@ public class Game {
                     }
                 }
             }
+        }
+    }
+
+    public static void checkParameters() {
+        for (Map.Entry<String, Integer> entry : person.variableParameters.entrySet()) {
+            if (entry.getValue() == 49) {
+                switch (entry.getKey()) {
+                    case "hunger":
+                        System.out.println("В животе забурчало. Похоже, пора подкрепиться.");
+                }
+            }
+            entry.setValue(entry.getValue()-1);
         }
     }
 }

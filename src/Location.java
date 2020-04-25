@@ -1,8 +1,6 @@
 import java.util.*;
 
 public class Location {
-    static Person person = Game.person;
-
     String yourLocationIs;
     String wayToThis;
     List<String> items;
@@ -23,9 +21,10 @@ public class Location {
     }
 
     private void searchItem() {
-        if (this.items.size() != 0) {
+        if (this.items.size() > 0) {
             String item = this.items.get(0);
-            person.inventory.add(item);
+            //System.out.println(item);
+            Game.person.inventory.add(item);
             System.out.println("Вы нашли " + item + "!");
             switch (item) {
                 case "ключ" :
@@ -41,7 +40,7 @@ public class Location {
     }
 
     private void openDoor() {
-        if (person.inventory.contains("ключ")) {
+        if (Game.person.inventory.contains("ключ")) {
             System.out.println("Вы смогли открыть дверь!");
             Game.hallway.ways.replace("Выйти наружу!", false, true);
             Game.goToLocation("Идти в коридор");
@@ -57,6 +56,12 @@ public class Location {
                 this.openDoor();
                 break;
         }
+        /*
+        for (Map.Entry<String, Integer> entry : person.variableParameters.entrySet()) {
+            entry.setValue(entry.getValue()-1);
+        }
+
+         */
     }
 
     public void addWays(Location...locations) {
@@ -93,14 +98,10 @@ public class Location {
     }
 
     public void addMessage(String...strings) {
-        for (String s : strings) {
-            this.messages.add(s);
-        }
+        this.messages.addAll(Arrays.asList(strings));
     }
 
     public void addItems(String...strings) {
-        for (String s : strings) {
-            this.items.add(s);
-        }
+        this.items.addAll(Arrays.asList(strings));
     }
 }
