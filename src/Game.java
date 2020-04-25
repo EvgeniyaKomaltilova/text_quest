@@ -18,7 +18,6 @@ public class Game {
 
     public static void main(String[] args) {
         initLocations();
-        initPerson();
         startGame();
         gameProcess();
     }
@@ -48,22 +47,18 @@ public class Game {
         bathRoom.addItems("зубную щетку");
     }
 
-    public static void initPerson() {
-        person.addVariableParameter("hunger", 50);
-        //System.out.println(person.variableParameters.entrySet());
-    }
-
     public static void startGame() {
         isStarted = true;
-        System.out.println("Вы проснулись в чьей-то квартире.");
+        System.out.println("Вы проснулись в своей квартире.");
         goToLocation("Идти в спальню");
     }
 
     public static void gameProcess() {
         String s;
         while(isStarted) {
+            checkAlive();
             s = getString();
-            checkParameters();
+            person.doPersonAction(s);
             currentLocation.doAction(s);
             goToLocation(s);
         }
@@ -115,15 +110,28 @@ public class Game {
         }
     }
 
-    public static void checkParameters() {
-        for (Map.Entry<String, Integer> entry : person.variableParameters.entrySet()) {
-            if (entry.getValue() == 49) {
-                switch (entry.getKey()) {
-                    case "hunger":
-                        System.out.println("В животе забурчало. Похоже, пора подкрепиться.");
-                }
-            }
-            entry.setValue(entry.getValue()-1);
+    public static void checkAlive() {
+        if (person.health <= 0) {
+            System.out.println("Вы умерли.");
+            isStarted = false;
+        }
+        if (person.mentalHealth <= 0) {
+            System.out.println("Вы сошли с ума.");
+            isStarted = false;
+        }
+        if (person.hunger <= 0) {
+            person.health-=1;
+        }
+        if (person.thirst <= 0) {
+            person.health-=2;
+        }
+        if (person.mood <= 0) {
+            person.mentalHealth--;
+        }
+        if (person.toilet <= 0) {
+            System.out.println("Кажется, вам нужно сменить штаны...");
+            person.mood-=10;
         }
     }
+
 }

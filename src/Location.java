@@ -56,12 +56,6 @@ public class Location {
                 this.openDoor();
                 break;
         }
-        /*
-        for (Map.Entry<String, Integer> entry : person.variableParameters.entrySet()) {
-            entry.setValue(entry.getValue()-1);
-        }
-
-         */
     }
 
     public void addWays(Location...locations) {
