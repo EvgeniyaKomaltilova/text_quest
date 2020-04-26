@@ -7,6 +7,7 @@ public class Person {
     private static Person instance = null;
     List<String> inventory;
     List<String> personActions;
+    int time; //время
     int hunger; //голод
     int thirst; //жажда
     int toilet; //нужда
@@ -20,6 +21,7 @@ public class Person {
     private Person() {
         this.inventory = new ArrayList<>();
         this.personActions = new ArrayList<>();
+        this.time = 360;
         this.hunger = 40;
         this.thirst = 40;
         this.toilet = 40;
@@ -39,6 +41,17 @@ public class Person {
     }
 
     public void checkParameters() {
+        System.out.print("Сегодня " + time/1440+1 + " марта, ");
+        if (time%1440 < 360 || time%1440 >= 1320 ) {
+            System.out.println("ночь.");
+        } else if (time%1440 >= 360 && time%1440 < 720 ) {
+            System.out.println("утро.");
+        } else if (time%1440 >= 720 && time%1440 < 1080 ) {
+            System.out.println("день.");
+        } else if (time%1440 >= 1080 && time%1440 < 1320 ) {
+            System.out.println("вечер.");
+        }
+
         if (health < 10 && health >0) {
             System.out.println("Вам хреново.");
         } else if (health < 20) {
@@ -124,17 +137,36 @@ public class Person {
     }
 
     public void ateFood() {
-        System.out.println("Кажется, вы наелись. Можно жить!");
-        hunger = 40;
+        if (inventory.contains("food")) {
+            System.out.println("Кажется, вы наелись. Можно жить!");
+            hunger = 40;
+            toilet-=20;
+            time += 20;
+            inventory.remove("food");
+        } else {
+            System.out.println("У вас нет с собой еды.");
+        }
     }
 
     public void drink() {
-        System.out.println("Вы утолили жажду.");
-        hunger = 40;
+        if (inventory.contains("drink")) {
+            System.out.println("Вы утолили жажду.");
+            thirst = 40;
+            toilet-=10;
+            time += 5;
+            inventory.remove("drink");
+        } else {
+            System.out.println("У вас нет с собой никаких напитков.");
+        }
     }
 
     public void useToilet() {
-        System.out.println("Вы справили нужду.");
-        toilet = 40;
+        if (Game.currentLocation == Game.bathRoom) {
+            System.out.println("Вы справили нужду.");
+            toilet = 40;
+            time += 5;
+        } else {
+            System.out.println("Вы уверены, что хотите сделать это здесь?");
+        }
     }
 }

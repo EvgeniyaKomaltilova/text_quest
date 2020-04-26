@@ -23,7 +23,6 @@ public class Location {
     private void searchItem() {
         if (this.items.size() > 0) {
             String item = this.items.get(0);
-            //System.out.println(item);
             Game.person.inventory.add(item);
             System.out.println("Вы нашли " + item + "!");
             switch (item) {
@@ -62,13 +61,6 @@ public class Location {
         for (Location loc : locations) {
             this.ways.put(loc.wayToThis, true);
             loc.ways.put(this.wayToThis, true);
-        }
-    }
-
-    public void oneWayTicket(Location...locations) {
-        for (Location loc : locations) {
-            this.ways.put(loc.wayToThis, true);
-            loc.ways.put(this.wayToThis, false);
         }
     }
 
